@@ -132,10 +132,10 @@ dmypy.json
 .DS_Store
 
 # Dataset images
-dataset/*/*
-!dataset/*/*.py
+*/dataset/*/*
+!*/dataset/*/*.py
 
 # Test result files
-test
-!test/*.sh
-!test/*.py
+*/test
+!*/test/*.sh
+!*/test/*.py
