@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# OS generated files
+.DS_Store
+
+# Dataset images
+*/examples/*/*
+!*/examples/*/*.py
