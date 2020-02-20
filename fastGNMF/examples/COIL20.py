@@ -15,16 +15,13 @@ import sys
 sys.path.append(dirname(dirname(dirname(abspath(__file__)))))
 import argparse
 
-from src.nmf import Nmf
-from src.gnmf import Gnmf
+from fastGNMF import Gnmf, Nmf
 
 # easy to differentiate colors
 DISTINCT_COLS = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
                  "#911eb4", "#42d4f4", "#f032e6", "#bfef45", "#fabebe",
                  "#469990", "#e6beff", "#9A6324", "#000000", "#800000",
                  "#aaffc3", "#808000", "#ffd8b1", "#000075", "#a9a9a9"]
-
-res_dir = join("test/coil_dataset_fixed")
 
 def read_dataset(rank=20, image_num=72, seed=None):
     """
@@ -34,7 +31,7 @@ def read_dataset(rank=20, image_num=72, seed=None):
     - groundtruth: an array with length image_num containing integers [0..rank-1],
                    separating the images into those categories
     """
-    coil20_dir = dirname(abspath(__file__))
+    coil20_dir = join(dirname(abspath(__file__)), "COIL20")
     coil20_len = 20
     coil20_obj_len = 72
     img_size = 32
@@ -84,10 +81,13 @@ def plot(U, cols, rows, len):
 def visualize_tsne(V, rank, groundtruth, plot_title, plot_file, tsne_perplexity=2, seed=None):
     """
     Output V visualization using T-SNE
-    - V   : the latent feature factor produced by the factorization
-    - rank: the number of clusters
-    - groundtruth: a list of integers represent different clusters
-    - plot_title: the plot title
+    - V              : the latent feature factor produced by the factorization
+    - rank           : the number of clusters
+    - groundtruth    : a list of integers represent different clusters
+    - plot_title     : the plot title
+    - plot_file      : the output file path
+    - tsne_perplexity: the perplexity parameter for T-SNE
+    - seed           : seed if necessary
     """
     # obtain clusters from V
     if seed: np.random.seed(seed)
@@ -98,7 +98,7 @@ def visualize_tsne(V, rank, groundtruth, plot_title, plot_file, tsne_perplexity=
                     palette=DISTINCT_COLS[:max(groundtruth)+1], legend=False,
                     linewidth=0
                     ).set_title(plot_title)
-    plt.savefig(join(res_dir, plot_file))
+    plt.savefig(plot_file)
     plt.clf()
 
 if __name__ == "__main__":
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     best_seed = None
 
     # Repeat the GNMF 20x and keep the one with the lowest objective function value
-    for i in range(1):
+    for i in range(20):
         input.seed = np.random.randint(0, 1000)
         X, groundtruth = read_dataset(rank=input.rank, image_num=input.imagenum, seed=input.seed)
         gnmf = Gnmf(X=X, rank=input.rank, p=input.pneighbor, lmbda=input.lmbda, method=input.method)
