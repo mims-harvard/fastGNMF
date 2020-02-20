@@ -8,7 +8,7 @@ class Gnmf(object):
 
     Note: the divergence update method is not yet finalized
     """
-    def __init__(self, X, rank=10, p=3, W=None, lmbda=100, method="euclidean",
+    def __init__(self, X, rank=10, p=3, W=None, lmbda=.5, method="euclidean",
                  knn_index_type="IndexFlatL2", knn_index_args=None):
         """
         - X     : the original matrix
@@ -54,7 +54,7 @@ class Gnmf(object):
         """
         import faiss
 
-        print("Generating weight matrix using faiss...")
+        print("Generating weight matrix with faiss...")
         time_cp1 = time.time()
         X = self.X.astype(np.float32)
         n, m = X.shape
@@ -76,7 +76,7 @@ class Gnmf(object):
                 # compute dot-product weighting
                 W[i][neighbor] = W[neighbor][i] = np.dot(X[:,i], X[:,neighbor])
         time_cp2 = time.time()
-        print("total time: ", time_cp2 - time_cp1)
+        print("Total duration: %.2f" % (time_cp2 - time_cp1))
         return(W)
 
     def update_euclidean(self, U, V):
@@ -158,18 +158,16 @@ class Gnmf(object):
         U = self.init_rand_matrix(n, rank, seed)
         V = self.init_rand_matrix(rank, m, seed)
 
-        print("running GNMF given matrix %dx%d, rank %d, %d neighbors, lambda %d, %d iterations" % (n, m, rank, self.p, self.lmbda, n_iter))
+        print("Running GNMF with X %dx%d, rank %d, %d neighbors, lambda %d, %d iterations" % (n, m, rank, self.p, self.lmbda, n_iter))
         time_cp1 = time.time()
         obj_vals = [] # a list of the produced objective function values
         curr_obj_val = float("inf")
         for iter in range(n_iter):
-            if iter % 20 == 0:
-                print("Completed %d iterations..." % iter)
-
             U, V, obj_val = (self.update_euclidean(U, V)
                             if self.method == "euclidean"
                             else self.update_divergence(U, V))
-            print("Objective function value is %.2f" % obj_val)
+            if (iter + 1) % 20 == 0:
+                print("Completed %d iteration, objective function value: %.2f" % (iter + 1, obj_val))
 
             # check if the objective function value is decreasing
             if curr_obj_val < obj_val:
@@ -179,7 +177,8 @@ class Gnmf(object):
             obj_vals.append(obj_val)
 
         time_cp2 = time.time()
-        print("total duration: %d; avg duration/iter: %.2f" % (time_cp2 - time_cp1, (time_cp2 - time_cp1) / n_iter))
+        print("The final objective function value is %.2f" % curr_obj_val)
+        print("Total duration: %.2f; avg duration/iter: %.2f" % ((time_cp2 - time_cp1), (time_cp2 - time_cp1) / n_iter))
 
         # set the euclidean length of each col vec in U = 1
         sum_col_U = np.sqrt(np.sum(U**2, axis=0))
