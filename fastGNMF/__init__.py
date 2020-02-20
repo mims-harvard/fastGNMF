@@ -1,1 +1,1 @@
-from gnmf import src
+from fastGNMF.src import Gnmf, Nmf

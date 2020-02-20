@@ -1,1 +1,2 @@
-from . import nmf
+from .gnmf import Gnmf
+from .nmf import Nmf
