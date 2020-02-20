@@ -42,7 +42,7 @@ def read_dataset(rank=20, image_num=72, seed=None):
     Read COIL20 dataset, resize to 32x32
     Parameters
     - rank     : the number of objects (k)
-    - image_Num: the number of images per object
+    - image_num: the number of images per object
     Returns
     - X          : [(32 x 32) x (rank x image_num)] matrix containing the images
     - groundtruth: an array with length image_num containing integers [0..rank-1],
@@ -73,25 +73,25 @@ def read_dataset(rank=20, image_num=72, seed=None):
     groundtruth = (groundtruth / image_num).astype(int)
     return(X, groundtruth)
 
-def plot(U, cols, rows, len):
+def plot_basis(U, ncol, nrow, size=32):
     """
     Plots all basis images
     - U     : the basis matrix
-    - cols  : # cols in the canvas
-    - rows  : # rows in the canvas
-    - len   : the height/width of each basis image (assuming it's a square)
+    - ncol  : # cols in the canvas
+    - nrow  : # rows in the canvas
+    - size  : the height/width of each basis image (assuming it's a square)
     """
     # sns.heatmap(U)
     # plt.show()
     # return
     plt.set_cmap("gray")
-    canvas = Image.new("L", (cols * len + cols+1, rows * len + rows+1)) # (w, h)
-    for i in range(rows):
-        for j in range(cols):
-            basis = U[:, i * cols + j].reshape((len, len))
+    canvas = Image.new("L", (ncol * size + ncol+1, nrow * size + nrow+1)) # (w, h)
+    for i in range(nrow):
+        for j in range(ncol):
+            basis = U[:, i * ncol + j].reshape((size, size))
             basis = basis / basis.max() * 255
             img = expand(Image.fromarray(basis), border=1, fill=255)
-            canvas.paste(img.copy(), (j * len + j, i * len + i))
+            canvas.paste(img.copy(), (j * size + j, i * size + i))
     plt.imshow(canvas)
     plt.show()
 
