@@ -1,6 +1,9 @@
 import numpy as np
 
 class Nmf(object):
+    """
+    The basic non-negative matrix factorization (Lee & Seung, 1999 & 2001)
+    """
     def __init__(self, rank=20, method="euclidean"):
         self.method = method
         self.rank = rank

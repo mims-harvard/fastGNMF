@@ -3,7 +3,8 @@ import time
 
 class Gnmf(object):
     """
-    Graph regularized NMF
+    Graph-regularized NMF (Cai, 2011) using Faiss library for finding p-nearest neighbor.
+    More on Faiss: https://github.com/facebookresearch/faiss
 
     Note: the divergence update method is not yet finalized
     """
@@ -109,6 +110,7 @@ class Gnmf(object):
     def update_divergence(self, U, V):
         """
         Update U & V using multiplicative divergence approach
+        Note: need further improvement!
         """
         X = self.X
         lmbda = self.lmbda

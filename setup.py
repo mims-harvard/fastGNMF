@@ -8,7 +8,7 @@ setup(
     version='0.1.0',
     author='Kathleen Sucipto',
     author_email='sucipto.kathleen@gmail.com',
-    description='A python model for graph regularized non-negative matrix factorization using faiss library for its similarity search.',
+    description='A python model for graph-regularized non-negative matrix factorization using faiss library for its similarity search.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/pypa/sampleproject',

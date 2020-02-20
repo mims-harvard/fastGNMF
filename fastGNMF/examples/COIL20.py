@@ -1,5 +1,19 @@
 """
-Run GNMF on COIL20 dataset and visualize the result using T-SNE.
+COIL20 dataset (source: http://www.cs.columbia.edu/CAVE/software/softlib/coil-20.php)
+
+Ensure a directory named "COIL20" containing the images is available under the examples directory
+  with format obj[i]__[j].png where i = [1..n] and j = [0..k-1], n = # objects, k = # images/object
+
+For example, with n = 2 and k = 3
+- examples
+  - COIL20
+    - obj1__0.png
+    - obj1__1.png
+    - obj1__2.png
+    - obj2__0.png
+    - obj2__1.png
+    - obj2__2.png
+  - COIL20.py <this file>
 """
 
 import numpy as np
@@ -26,7 +40,10 @@ DISTINCT_COLS = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
 def read_dataset(rank=20, image_num=72, seed=None):
     """
     Read COIL20 dataset, resize to 32x32
-    Returns:
+    Parameters
+    - rank     : the number of objects (k)
+    - image_Num: the number of images per object
+    Returns
     - X          : [(32 x 32) x (rank x image_num)] matrix containing the images
     - groundtruth: an array with length image_num containing integers [0..rank-1],
                    separating the images into those categories
