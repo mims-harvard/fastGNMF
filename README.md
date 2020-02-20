@@ -32,4 +32,4 @@ The code above will output and save an image below.
 
 ![test_image](https://user-images.githubusercontent.com/7066351/74950403-0d042d00-53cd-11ea-870a-8a047bed09b5.png)
 
-More detailed documentation can be found on the [Wiki](https://github.com/mims-harvard/fastGNMF/wiki/fastGNMF) page.
+More detailed documentation can be found on the [Wiki](https://github.com/mims-harvard/fastGNMF/wiki) page.
