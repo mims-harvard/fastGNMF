@@ -6,7 +6,7 @@ Current version: 0.1.0
 ## Installation
 
 ```
-python setup.py sdist bdist_wheel
+python setup.py install --user
 ```
 
 ## Quick Start
