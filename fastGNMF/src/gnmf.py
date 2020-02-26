@@ -9,7 +9,7 @@ class Gnmf(object):
     Note: the divergence update method is not yet finalized
     """
     def __init__(self, X, rank=10, p=3, W=None, lmbda=.5, method="euclidean",
-                 knn_index_type="IndexFlatL2", knn_index_args=None):
+                 knn_index_type="IndexFlatL2", knn_index_args=None, disable_faiss=False):
         """
         - X     : the original matrix
         - rank  : NMF rank
@@ -18,6 +18,7 @@ class Gnmf(object):
         - method: "euclidean" or "divergence"
         - knn_index_type: faiss index type to compute k-nearest neighbors in matrix generation
         - knn_index_args: faiss index arguments; if None, by default the argument for IndexFlatL2 is used
+        - disable_faiss : run a manual KNN if True else apply faiss index
         Check https://github.com/facebookresearch/faiss/wiki/Faiss-indexes for further details on faiss index
         """
         self.X = X
@@ -30,6 +31,7 @@ class Gnmf(object):
         self.p = p
         self.knn_index_type = knn_index_type
         self.knn_index_args = knn_index_args
+        self.disable_faiss = disable_faiss
         if self.W is None:
             self.W = self.calc_weights_matrix()
         elif not self.is_matrix_symmetric(self.W):
@@ -54,27 +56,42 @@ class Gnmf(object):
         """
         import faiss
 
-        print("Generating weight matrix with faiss...")
+        # time checkpoint 1
         time_cp1 = time.time()
-        X = self.X.astype(np.float32)
-        n, m = X.shape
-        xb = np.ascontiguousarray(X.T) # database ~ rows of vectors
-        xq = np.ascontiguousarray(X.T) # query vectors
-        W = np.zeros((m, m))
 
+        X = self.X
+        n, m = X.shape
+        W = np.zeros((m, m))
         p = self.p
-        if not self.knn_index_args:
-            self.knn_index_args = (n,)
-        # build the index
-        index = getattr(faiss, self.knn_index_type)(*self.knn_index_args)
-        index.add(xb)                  # add vectors to the index
-        _, I = index.search(xq, p+1)   # the first col would be the vector itself
+
+        if self.disable_faiss:
+            print("Generating weight matrix with manual KNN...")
+            dist_matrix = np.full((m, m), np.inf)
+            for i in range(m - 1):
+                for j in range(i + 1, m):
+                    dist_matrix[i][j] = dist_matrix[j][i] = np.linalg.norm(X[:,i] - X[:,j])
+            # finding p-nearest neighbors for each data point
+            I = np.argsort(dist_matrix, axis=1)[:,:p]
+        else:
+            print("Generating weight matrix with faiss...")
+            X = X.astype(np.float32)
+            xb = np.ascontiguousarray(X.T) # database ~ rows of vectors
+            xq = np.ascontiguousarray(X.T) # query vectors
+            if not self.knn_index_args:
+                self.knn_index_args = (n,)
+            # build the index
+            index = getattr(faiss, self.knn_index_type)(*self.knn_index_args)
+            index.add(xb)                  # add vectors to the index
+            _, I = index.search(xq, p+1)
+            # the first col would be the vector itself, so remove
+            I = I[:,1:]
 
         for i in range(m):
             for j in range(p):
-                neighbor = I[i][j+1]
+                neighbor = I[i][j]
                 # compute dot-product weighting
                 W[i][neighbor] = W[neighbor][i] = np.dot(X[:,i], X[:,neighbor])
+        # time checkpoint 2
         time_cp2 = time.time()
         print("Total duration: %.2f" % (time_cp2 - time_cp1))
         return(W)
