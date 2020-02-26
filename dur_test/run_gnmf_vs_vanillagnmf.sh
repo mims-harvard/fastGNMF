@@ -9,13 +9,19 @@
 
 n_list=(100 500 1000 5000 10000 30000)
 m_list=(1000 1000 5000 10000 50000 50000)
+n_list=(100)
+m_list=(50)
 p=8
 k=20
 
 for i in ${!n_list[*]}; do
   n=${n_list[i]}
   m=${m_list[i]}
-  echo $n $m
+  printf "#!/bin/bash\npython dur_test/run_gnmf.py -n $n -m $m -p $p -k $k" > dur_test/run_gnmf_dum.sh
+  sbatch dur_test/run_gnmf_dum.sh -p serial_requeue -t 0-02:00 --mem=5G -o gnmf_slurm_${n}_${m}.out -e gnmf_slurm_${n}_${m}.err
+  sleep 1
+  # echo "python dur_test/run_gnmf.py -n $n -m $m -p $p -k $k --vanilla" > dur_test/run_gnmf_dum_van.sh
+  # sbatch dur_test/run_gnmf_dum_van.sh -p serial_requeue -t 120 --mem=5G -o gnmf_vanilla_${n}_${m}_slurm.out -e gnmf_vanilla_${n}_${m}_slurm.err
 done
 #
 # source activate ${env_name}
