@@ -1,7 +1,7 @@
 # fastGNMF
 Fast graph-regularized non-negative matrix factorization based on [faiss](https://github.com/facebookresearch/faiss) for finding p-nearest neighbors.
 
-Current version: 0.1.0
+Current version: 0.1.1
 
 ## Runtime
 

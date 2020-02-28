@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='fastGNMF',
-    version='0.1.0',
+    version='0.1.1',
     author='Kathleen Sucipto',
     author_email='sucipto.kathleen@gmail.com',
     description='A python model for graph-regularized non-negative matrix factorization using faiss library for its similarity search.',
