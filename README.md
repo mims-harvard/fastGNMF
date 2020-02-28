@@ -3,6 +3,19 @@ Fast graph-regularized non-negative matrix factorization based on [faiss](https:
 
 Current version: 0.1.0
 
+## Runtime
+
+<img src="https://user-images.githubusercontent.com/7066351/75503577-f731d180-59a3-11ea-85e6-ae2e2c264404.png" width="500" />
+
+(run on the same machine)
+
+Other parameters:
+```
+- lambda = 0.5
+- k      = 50
+- p      = 8
+```
+
 ## Installation
 
 ```
