@@ -14,6 +14,7 @@ class Gnmf(object):
         - X     : the original matrix
         - rank  : NMF rank
         - p     : # closest neighbors to be taken into account in the weight matrix
+        - lmbda : the regularization parameter
         - W     : the weight matrix - must be symmetric; p will be ignored if W is provided
         - method: "euclidean" or "divergence"
         - knn_index_type: faiss index type to compute k-nearest neighbors in matrix generation
@@ -175,7 +176,7 @@ class Gnmf(object):
         U = self.init_rand_matrix(n, rank, seed)
         V = self.init_rand_matrix(rank, m, seed)
 
-        print("Running GNMF with X %dx%d, rank %d, %d neighbors, lambda %d, %d iterations" % (n, m, rank, self.p, self.lmbda, n_iter))
+        print("Running GNMF with X %dx%d, rank %d, %d neighbors, lambda %s, %d iterations" % (n, m, rank, self.p, str(self.lmbda), n_iter))
         time_cp1 = time.time()
         obj_vals = [] # a list of the produced objective function values
         curr_obj_val = float("inf")
