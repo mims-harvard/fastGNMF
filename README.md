@@ -20,14 +20,14 @@ Other parameters used:
 
 ## Installation
 
-### Build and install the module
+### 1) Build and install the module
 
 ```
 python setup.py install --user
 pip install -r requirements.txt
 ```
 
-### Install faiss library
+### 2) Install faiss library
 
 Follow the steps [here](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md).
 
