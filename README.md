@@ -7,7 +7,7 @@ Current version: 0.1.1
 
 <img src="https://user-images.githubusercontent.com/7066351/75503577-f731d180-59a3-11ea-85e6-ae2e2c264404.png" width="500" />
 
-(run on the same machine)
+(run on the same machine using randomly generated data matrix)
 
 Other parameters used:
 
@@ -16,6 +16,7 @@ Other parameters used:
 - k           = 50
 - p           = 8
 - faiss index = IndexFlatL2
+- # iterations= 100
 ```
 
 ## Installation
