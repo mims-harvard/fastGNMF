@@ -9,18 +9,27 @@ Current version: 0.1.0
 
 (run on the same machine)
 
-Other parameters:
+Other parameters used:
+
 ```
-- lambda = 0.5
-- k      = 50
-- p      = 8
+- lambda      = 0.5
+- k           = 50
+- p           = 8
+- faiss index = IndexFlatL2
 ```
 
 ## Installation
 
+### Build and install the module
+
 ```
 python setup.py install --user
+pip install -r requirements.txt
 ```
+
+### Install faiss library
+
+Follow the steps [here](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md).
 
 ## Quick Start
 
