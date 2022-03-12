@@ -26,5 +26,5 @@ setup(
                       'matplotlib==3.1.3',
                       'seaborn==0.9.0',
                       'sklearn==0.22.1',
-                      'Pillow==7.0.0']
+                      'Pillow==9.0.1']
 )
