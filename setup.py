@@ -22,7 +22,7 @@ setup(
                  'Programming Language :: Python :: 3',
     ],
     python_requires='>=3.6',
-    install_requires=['numpy==1.18.1',
+    install_requires=['numpy==1.22.0',
                       'matplotlib==3.1.3',
                       'seaborn==0.9.0',
                       'sklearn==0.22.1',
